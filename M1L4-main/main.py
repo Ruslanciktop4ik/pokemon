@@ -23,13 +23,21 @@ def start(message):
         bot.reply_to(message, "Ты уже создал себе покемона")
 
 
-@bot.message_handler(commands=['korm'])
-def send_info(message):
+@bot.message_handler(commands=['feed'])
+def feed_pok(message):
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pok = Pokemon.pokemons[message.from_user.username]
+        responce = pok.feed()
+        bot.send_message(message.chat.id, responce)
+    else:
+        bot.send_message(message.chat.id, "У вас нет покемона")
     
-    bot.reply_to(message, """\
-Ты покормил своего покемона, Каждое кормление дает 1 уровень +1 уровень \
-""")
-    
+
+@bot.message_handler(commands=['info'])
+def go(message):
+    if message.from_user.username in Pokemon.pokemons.keys():
+        pokemon = Pokemon.pokemons[message.from_user.username]
+        bot.send_message(message.chat.id, pokemon.info())
 
 @bot.message_handler(commands=['attack'])
 def attack_pok(message):
